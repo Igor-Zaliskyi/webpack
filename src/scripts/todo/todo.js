@@ -50,22 +50,15 @@ const renderTodoList = () => {
 //     item.isChecked = true;
 // })
 
-// let counter = 0
+
 const addTodo = () => {
     const input = document.getElementById("input").value
-    // const doneCount = document.getElementById('doneCount')
-    // counter += 1
-    // doneCount.innerText = counter
-
-
     todos.push({
         id:        todos.length + 1,
         value:     input,
         isChecked: false
     })
-    // @todo remove it
-    // todoAppView.innerHTML = ''
-
+    
     renderTodoList()
     return false
 }
@@ -73,14 +66,8 @@ const addTodo = () => {
 renderTodoList()
 
 
-//  removeElement
-// @todo remove it
-// let reverscounter = counter  // counter
 const removeTodoById = todoId => {
-    // @tod remove it
-    // reverscounter -= 1
-    // const undoneCount = document.getElementById('undoneCount')
-    // undoneCount.innerText = reverscounter
+  
     const index = todos.findIndex(todo => todo.id === todoId);
 
     todos.splice(index, 1)
@@ -88,10 +75,6 @@ const removeTodoById = todoId => {
     return false
 }
 
-// const general = document.getElementById('generalCount');
-// let count = todos.length;
-// general.innerText = count;
-// console.log(general);
 
 window.addTodo = addTodo
 window.changeStatusById = changeStatusById
