@@ -27,7 +27,10 @@ const getTodoHTML = (item, index, callbacks) => {
 
 
 export const Todo = (todos, wrapperTodos) => {
-    const todoAppView = document.querySelector(wrapperTodos)
+    const todoAppView = document.querySelector(wrapperTodos);
+    const generalCount = document.getElementById('generalCount');
+    const doneCount = document.getElementById('doneCount');
+    const undoneCount = document.getElementById('undoneCount');
 
     const changeStatusById = todoId => {
         const todo = todos.find(todo => todo.id === todoId)
@@ -41,14 +44,11 @@ export const Todo = (todos, wrapperTodos) => {
 
     const renderTodoCounts = () => {
         // @todo do it!
-        const generalCount = document.getElementById('generalCount');
-        const doneCount = document.getElementById('doneCount');
-        const undoneCount = document.getElementById('undoneCount');
         const count = todos.length;
         
         generalCount.textContent = count;
-        doneCount.textContent = count - 3;
-        undoneCount.textContent = count;
+        // doneCount = todos.find(todo => todo. )
+        
     }
 
     const renderTodoList = () => {
