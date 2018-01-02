@@ -19,7 +19,7 @@ const todos = [
     }
 ]
 
-const MyTodo = Todo(todos, '#todo-list')
+const MyTodo = Todo('#todo-list')
 
 const addTodo = () => {
     const todoText = document.getElementById("input").value
