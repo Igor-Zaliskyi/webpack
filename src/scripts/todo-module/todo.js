@@ -25,6 +25,7 @@ const getTodoHTML = (item, index, callbacks) => {
     return li
 }
 
+
 export const Todo = (todos, wrapperTodos) => {
     const todoAppView = document.querySelector(wrapperTodos)
 
@@ -40,6 +41,14 @@ export const Todo = (todos, wrapperTodos) => {
 
     const renderTodoCounts = () => {
         // @todo do it!
+        const generalCount = document.getElementById('generalCount');
+        const doneCount = document.getElementById('doneCount');
+        const undoneCount = document.getElementById('undoneCount');
+        const count = todos.length;
+        
+        generalCount.textContent = count;
+        doneCount.textContent = count - 3;
+        undoneCount.textContent = count;
     }
 
     const renderTodoList = () => {
