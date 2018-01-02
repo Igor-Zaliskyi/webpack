@@ -26,8 +26,9 @@ const getTodoHTML = (item, index, callbacks) => {
 }
 
 
-export const Todo = (todos, wrapperTodos) => {
+export const Todo = wrapperTodos => {
     const todoAppView = document.querySelector(wrapperTodos)
+    const todoLocalStorageKey = 'todos'
 
     const changeStatusById = todoId => {
         const todo = todos.find(todo => todo.id === todoId)
@@ -37,18 +38,19 @@ export const Todo = (todos, wrapperTodos) => {
     const render = () => {
         renderTodoList()
         renderTodoCounts()
+        saveTodos()
     }
 
     const renderTodoCounts = () => {
         // @todo do it!
-        const generalCount = document.getElementById('generalCount');
-        const doneCount = document.getElementById('doneCount');
-        const undoneCount = document.getElementById('undoneCount');
-        const count = todos.length;
-        
-        generalCount.textContent = count;
-        doneCount.textContent = count - 3;
-        undoneCount.textContent = count;
+        const generalCount = document.getElementById('generalCount')
+        const doneCount = document.getElementById('doneCount')
+        const undoneCount = document.getElementById('undoneCount')
+        const count = todos.length
+
+        generalCount.textContent = count
+        doneCount.textContent = count - 3
+        undoneCount.textContent = count
     }
 
     const renderTodoList = () => {
@@ -78,10 +80,19 @@ export const Todo = (todos, wrapperTodos) => {
         render()
     }
 
+    const getTodos = () => {
+        return JSON.parse(localStorage.getItem(todoLocalStorageKey)) || []
+    }
+
+    const saveTodos = () => {
+        localStorage.setItem(todoLocalStorageKey, JSON.stringify(todos))
+    }
+
+    let todos = getTodos()
+
     render()
 
     return {
-        // addTodo: _addTodo
         addTodo
     }
 }
