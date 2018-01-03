@@ -54,8 +54,7 @@ export const Todo = wrapperTodos => {
         const done = todos.filter(item => item.isChecked);
         doneCount.textContent = done.length;
         const updone = todos.filter(item => !item.isChecked);
-        undoneCount.textContent = updone.length; 
-        addClassActive()   
+        undoneCount.textContent = updone.length;   
     }
 
     const renderTodoList = () => {
