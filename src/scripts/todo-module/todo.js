@@ -57,6 +57,10 @@ export const Todo = wrapperTodos => {
         undoneCount.textContent = updone.length;   
     }
 
+    const addClassActive = () => {
+        
+    }
+
     const renderTodoList = () => {
         todoAppView.innerHTML = ''
         todos
