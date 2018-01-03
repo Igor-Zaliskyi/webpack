@@ -24,33 +24,37 @@ const getTodoHTML = (item, index, callbacks) => {
     li.appendChild(button)
     return li
 }
-
-
+  
 export const Todo = wrapperTodos => {
     const todoAppView = document.querySelector(wrapperTodos)
     const todoLocalStorageKey = 'todos'
+    const generalCount = document.getElementById('generalCount');
+    const doneCount = document.getElementById('doneCount');
+    const undoneCount = document.getElementById('undoneCount');
+
 
     const changeStatusById = todoId => {
         const todo = todos.find(todo => todo.id === todoId)
         todo.isChecked = !todo.isChecked
+        renderTodoCounts()
+        
     }
 
     const render = () => {
         renderTodoList()
         renderTodoCounts()
         saveTodos()
+       
     }
 
     const renderTodoCounts = () => {
         // @todo do it!
-        const generalCount = document.getElementById('generalCount')
-        const doneCount = document.getElementById('doneCount')
-        const undoneCount = document.getElementById('undoneCount')
-        const count = todos.length
-
-        generalCount.textContent = count
-        doneCount.textContent = count - 3
-        undoneCount.textContent = count
+        const count = todos.length;
+        generalCount.textContent = count;
+        const done = todos.filter(item => item.isChecked);
+        doneCount.textContent = done.length;
+        const updone = todos.filter(item => !item.isChecked);
+        undoneCount.textContent = updone.length;   
     }
 
     const renderTodoList = () => {
