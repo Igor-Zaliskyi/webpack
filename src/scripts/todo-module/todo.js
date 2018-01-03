@@ -6,10 +6,10 @@ const getTodoHTML = (item, index, callbacks) => {
     const li = document.createElement('li')
     const input = document.createElement('input')
     const id = `todo${index}`
-    // if (item.isChecked) {
-    //     li.className = 'active'
-    //     input.setAttribute('checked', 'checked')
-    // }
+    if (item.isChecked) {
+        li.className = 'active'
+        input.setAttribute('checked', 'checked')
+    }
     input.setAttribute('type', 'checkbox')
     input.setAttribute('id', id)
     input.onchange = () => changeStatusById(item.id)
@@ -56,14 +56,6 @@ export const Todo = wrapperTodos => {
         const updone = todos.filter(item => !item.isChecked);
         undoneCount.textContent = updone.length; 
         addClassActive()   
-    }
-
-    const addClassActive = () => {
-        todos.forEach((item) => {
-            item.isChecked
-            
-        })
-        
     }
 
     const renderTodoList = () => {
