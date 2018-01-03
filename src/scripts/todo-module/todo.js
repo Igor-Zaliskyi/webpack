@@ -37,6 +37,7 @@ export const Todo = wrapperTodos => {
         const todo = todos.find(todo => todo.id === todoId)
         todo.isChecked = !todo.isChecked
         renderTodoCounts()
+        
     }
 
     const render = () => {
@@ -53,7 +54,16 @@ export const Todo = wrapperTodos => {
         const done = todos.filter(item => item.isChecked);
         doneCount.textContent = done.length;
         const updone = todos.filter(item => !item.isChecked);
-        undoneCount.textContent = updone.length;    
+        undoneCount.textContent = updone.length; 
+        addClassActive()   
+    }
+
+    const addClassActive = () => {
+        todos.forEach((item) => {
+            item.isChecked
+            
+        })
+        
     }
 
     const renderTodoList = () => {
