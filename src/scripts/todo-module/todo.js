@@ -1,7 +1,7 @@
 // 1. Save value on change
 
 const getTodoHTML = (item, index, callbacks) => {
-    const { changeStatusById, removeTodoById } = callbacks
+    const { changeStatusById, removeTodoById, seveTextLabel} = callbacks
     const li = document.createElement('li')
     const input = document.createElement('input')
     const label = document.createElement('label')
@@ -19,7 +19,8 @@ const getTodoHTML = (item, index, callbacks) => {
     label.innerText = item.value
     label.setAttribute('contenteditable', 'true')
     // @todo I. Z. do it!
-    label.oninput = () => console.log(label.textContent)
+    label.oninput = () => seveTextLabel(item.id, label.textContent)
+
     button.onclick = () => removeTodoById(item.id)
     button.innerText = 'X'
     li.appendChild(input)
@@ -46,7 +47,14 @@ export const Todo = wrapperTodos => {
         // @todo Y. L. remove it after api
         renderTodoCounts()
     }
-
+    
+    const seveTextLabel = (todoId, label) => {
+        const todo = getTodos().find(todo => todo.id === todoId)
+        todo.value = label
+        
+        updateTodo(todo)
+    }
+    
     const render = () => {
         renderTodoList()
         renderTodoCounts()
@@ -65,10 +73,12 @@ export const Todo = wrapperTodos => {
 
     const renderTodoList = () => {
         todoAppView.innerHTML = ''
+        console.log(getTodos())
         getTodos()
             .map((item, index) => getTodoHTML(item, index, {
                 changeStatusById,
-                removeTodoById
+                removeTodoById,
+                seveTextLabel
             }))
             .forEach(liEelement => todoAppView.appendChild(liEelement))
     }
