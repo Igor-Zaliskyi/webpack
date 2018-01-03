@@ -1,65 +1,71 @@
-// 1. Display counts
-// 2. Add/remove class active for li on change status
+// 1. Save value on change
 
 const getTodoHTML = (item, index, callbacks) => {
     const { changeStatusById, removeTodoById } = callbacks
     const li = document.createElement('li')
     const input = document.createElement('input')
+    const label = document.createElement('label')
+    const button = document.createElement('button')
     const id = `todo${index}`
+
     if (item.isChecked) {
         li.className = 'active'
         input.setAttribute('checked', 'checked')
     }
     input.setAttribute('type', 'checkbox')
-    input.setAttribute('id', id)
-    input.onchange = () => changeStatusById(item.id)
-    const label = document.createElement('label')
-    label.setAttribute('for', id)
+    // input.setAttribute('id', id)
+    input.onchange = () => changeStatusById(item.id, li)
+    // label.setAttribute('for', id)
     label.innerText = item.value
-    const button = document.createElement('button')
+    label.setAttribute('contenteditable', 'true')
+    // @todo I. Z. do it!
+    label.oninput = () => console.log(label.textContent)
     button.onclick = () => removeTodoById(item.id)
     button.innerText = 'X'
     li.appendChild(input)
     li.appendChild(label)
     li.appendChild(button)
+
     return li
 }
-  
+
 export const Todo = wrapperTodos => {
     const todoAppView = document.querySelector(wrapperTodos)
     const todoLocalStorageKey = 'todos'
-    const generalCount = document.getElementById('generalCount');
-    const doneCount = document.getElementById('doneCount');
-    const undoneCount = document.getElementById('undoneCount');
+    const generalCount = document.getElementById('generalCount')
+    const doneCount = document.getElementById('doneCount')
+    const undoneCount = document.getElementById('undoneCount')
 
-
-    const changeStatusById = todoId => {
-        const todo = todos.find(todo => todo.id === todoId)
+    const changeStatusById = (todoId, parentElement) => {
+        const todo = getTodos().find(todo => todo.id === todoId)
         todo.isChecked = !todo.isChecked
+        parentElement.classList.toggle('active')
+
+        updateTodo(todo)
+
+        // @todo Y. L. remove it after api
         renderTodoCounts()
-        
     }
 
     const render = () => {
         renderTodoList()
         renderTodoCounts()
-        saveTodos()
-       
     }
 
     const renderTodoCounts = () => {
-        // @todo do it!
-        const count = todos.length;
-        generalCount.textContent = count;
-        const done = todos.filter(item => item.isChecked);
-        doneCount.textContent = done.length;
-        const updone = todos.filter(item => !item.isChecked);
-        undoneCount.textContent = updone.length;   
+        const todos = getTodos()
+        const count = todos.length
+        const done = todos.filter(item => item.isChecked).length
+        const undone = count - done
+
+        generalCount.textContent = count
+        doneCount.textContent = done
+        undoneCount.textContent = undone
     }
 
     const renderTodoList = () => {
         todoAppView.innerHTML = ''
-        todos
+        getTodos()
             .map((item, index) => getTodoHTML(item, index, {
                 changeStatusById,
                 removeTodoById
@@ -68,19 +74,23 @@ export const Todo = wrapperTodos => {
     }
 
     const removeTodoById = todoId => {
+        const todos = getTodos()
         const index = todos.findIndex(todo => todo.id === todoId)
 
         todos.splice(index, 1)
+        saveTodos(todos)
         render()
     }
 
     const addTodo = todoText => {
+        const todos = getTodos()
         todos.push({
             id:        todos.length + 1,
             value:     todoText,
             isChecked: false
         })
 
+        saveTodos(todos)
         render()
     }
 
@@ -88,11 +98,18 @@ export const Todo = wrapperTodos => {
         return JSON.parse(localStorage.getItem(todoLocalStorageKey)) || []
     }
 
-    const saveTodos = () => {
-        localStorage.setItem(todoLocalStorageKey, JSON.stringify(todos))
+    const updateTodo = todo => {
+        const { id: todoId } = todo
+        const todos = getTodos()
+        const targetTodo = todos.find(currentTodo => currentTodo.id === todoId)
+        Object.assign(targetTodo, todo)
+        saveTodos(todos)
     }
 
-    let todos = getTodos()
+    // @todo Y. L. remove it after api
+    const saveTodos = todos => {
+        localStorage.setItem(todoLocalStorageKey, JSON.stringify(todos))
+    }
 
     render()
 
