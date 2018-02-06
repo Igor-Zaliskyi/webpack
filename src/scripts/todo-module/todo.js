@@ -2,7 +2,7 @@
 import * as api from './todo.service'
 
 const getTodoHTML = (item, index, callbacks) => {
-    const { changeStatusById, removeTodoById, seveTextLabel } = callbacks
+    const { changeStatus, removeTodo, updateTextLabel } = callbacks
     const li = document.createElement('li')
     const input = document.createElement('input')
     const label = document.createElement('label')
@@ -15,14 +15,14 @@ const getTodoHTML = (item, index, callbacks) => {
     }
     input.setAttribute('type', 'checkbox')
     // input.setAttribute('id', id)
-    input.onchange = () => changeStatusById(item.id, !item.isChecked)
+    input.onchange = () => changeStatus(item.id, !item.isChecked)
     // label.setAttribute('for', id)
     label.innerText = item.value
     label.setAttribute('contenteditable', 'true')
     // @todo I. Z. do it!
-    label.oninput = () => seveTextLabel(item.id, label.textContent)
+    label.onblur = () => updateTextLabel(item.id, label.textContent)
 
-    button.onclick = () => removeTodoById(item.id)
+    button.onclick = () => removeTodo(item.id)
     button.innerText = 'X'
     li.appendChild(input)
     li.appendChild(label)
@@ -37,12 +37,12 @@ export const Todo = wrapperTodos => {
     const doneCount = document.getElementById('doneCount')
     const undoneCount = document.getElementById('undoneCount')
 
-    const changeStatusById = (id, isChecked) => updateTodo({
+    const changeStatus = (id, isChecked) => updateTodo({
         id,
         isChecked
     })
 
-    const seveTextLabel = (id, value) => updateTodo({
+    const updateTextLabel = (id, value) => updateTodo({
         id,
         value
     })
@@ -67,14 +67,14 @@ export const Todo = wrapperTodos => {
         todoAppView.innerHTML = ''
         todos
             .map((item, index) => getTodoHTML(item, index, {
-                changeStatusById,
-                removeTodoById,
-                seveTextLabel
+                changeStatus,
+                removeTodo,
+                updateTextLabel
             }))
             .forEach(liEelement => todoAppView.appendChild(liEelement))
     }
 
-    const removeTodoById = todoId => api.removeTodo(todoId)
+    const removeTodo = todoId => api.removeTodo(todoId)
         .then(render)
 
     const addTodo = todoText => api.addTodo({ value: todoText })
