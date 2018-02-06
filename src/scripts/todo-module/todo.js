@@ -20,7 +20,7 @@ const getTodoHTML = (item, index, callbacks) => {
     label.innerText = item.value
     label.setAttribute('contenteditable', 'true')
     // @todo I. Z. do it!
-    label.oninput = () => updateTextLabel(item.id, label.textContent)
+    label.onblur = () => updateTextLabel(item.id, label.textContent)
 
     button.onclick = () => removeTodo(item.id)
     button.innerText = 'X'
@@ -80,11 +80,8 @@ export const Todo = wrapperTodos => {
     const addTodo = todoText => api.addTodo({ value: todoText })
         .then(render)
 
-    const updateTodo = todo => {
-        debugger
-        return api.updateTodo(todo).then(render)
-    }
-
+    const updateTodo = todo => api.updateTodo(todo)
+        .then(render)
 
     render()
 
