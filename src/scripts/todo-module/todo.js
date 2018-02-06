@@ -31,11 +31,35 @@ const getTodoHTML = (item, index, callbacks) => {
     return li
 }
 
-export const Todo = wrapperTodos => {
-    const todoAppView = document.querySelector(wrapperTodos)
-    const generalCount = document.getElementById('generalCount')
-    const doneCount = document.getElementById('doneCount')
-    const undoneCount = document.getElementById('undoneCount')
+const getCountElement = descriptionText => {
+    const wrapper = document.createElement('p')
+    const count = document.createElement('span')
+    const description = document.createTextNode(`${descriptionText} - `)
+    wrapper.appendChild(description)
+    wrapper.appendChild(count)
+    return { wrapper, count }
+}
+
+const getForm = addTodo => {
+    const form = document.createElement('form')
+    const input = document.createElement('input')
+    input.setAttribute('type', 'text')
+    input.setAttribute('placeholder', 'Enter name new todo')
+    const submit = document.createElement('input')
+    submit.setAttribute('type', 'submit')
+    submit.setAttribute('value', 'Add todo')
+
+    form.onsubmit = addTodo
+
+    return form
+}
+
+export const Todo = container => {
+    const todoAppView = document.querySelector(container)
+    const { wrapper: wrapperGeneralCount, count: generalCount } = getCountElement('General count of todos')
+    const { wrapper: wrapperDoneCount, count: doneCount } = getCountElement('Count of done')
+    const { wrapper: wrapperUndoneCount, count: undoneCount } = getCountElement('Count of undone')
+    const list = document.createElement('ul')
 
     const changeStatus = (id, isChecked) => updateTodo({
         id,
@@ -64,14 +88,14 @@ export const Todo = wrapperTodos => {
     }
 
     const renderTodoList = todos => {
-        todoAppView.innerHTML = ''
+        list.innerHTML = ''
         todos
             .map((item, index) => getTodoHTML(item, index, {
                 changeStatus,
                 removeTodo,
                 updateTextLabel
             }))
-            .forEach(liEelement => todoAppView.appendChild(liEelement))
+            .forEach(liEelement => list.appendChild(liEelement))
     }
 
     const removeTodo = todoId => api.removeTodo(todoId)
@@ -83,9 +107,21 @@ export const Todo = wrapperTodos => {
     const updateTodo = todo => api.updateTodo(todo)
         .then(render)
 
-    render()
+
+    const createTodoTemplate = () => {
+        const form = getForm(addTodo)
+        list.className = 'todo-list'
+
+        todoAppView.appendChild(wrapperGeneralCount)
+        todoAppView.appendChild(wrapperDoneCount)
+        todoAppView.appendChild(wrapperUndoneCount)
+        todoAppView.appendChild(form)
+        todoAppView.appendChild(list)
+
+        render()
+    }
 
     return {
-        addTodo
+        createTodoTemplate
     }
 }
