@@ -1,9 +1,9 @@
-import * as api from './todo.service'
 import React, { Component } from 'react'
-import { getCountElement, getForm, getTodoHTML } from './todo.helper'
+import { getCountElement } from './todo.helper'
+import api from './todo.service'
 
 export class Todo extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props)
         const { wrapper: wrapperGeneralCount, count: generalCount } = getCountElement('General count of todos')
         const { wrapper: wrapperDoneCount, count: doneCount } = getCountElement('Count of done')
@@ -25,23 +25,35 @@ export class Todo extends Component {
         })
     }
 
-    updateTextLabel(id, value) {
-        return this.updateTodo({
-            id,
-            value
-        })
+    render() {
+        const { todos } = this.props
+        return (
+            <div id="todo-app">
+                <p>General count of todos - <span>5</span></p>
+                <p>Count of done - <span>0</span></p>
+                <p>Count of undone - <span>5</span></p>
+                <form>
+                    <input type="text" placeholder="Enter name new todo" />
+                    <input type="submit" value="Add todo" />
+                </form>
+                <ul class="todo-list">
+                    {todos.map(todo => {
+                        return (
+                            <li key={todo.id}>
+                                {todo.value}
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+        )
     }
 
-    render() {
-        return (
-            <div>Todoooo</div>
-        )
-        // return api.getTodos()
-        //     .then(todos => {
-        //         this.renderTodoList(todos)
-        //         this.renderTodoCounts(todos)
-        //     })
-    }
+    // return api.getTodos()
+    //     .then(todos => {
+    //         this.renderTodoList(todos)
+    //         this.renderTodoCounts(todos)
+    //     })
 
     renderTodoCounts(todos) {
         const count = todos.length
@@ -78,6 +90,13 @@ export class Todo extends Component {
     updateTodo(todo) {
         return api.updateTodo(todo)
             .then(this.render)
+    }
+
+    updateTextLabel(id, value) {
+        return this.updateTodo({
+            id,
+            value
+        })
     }
 
 
