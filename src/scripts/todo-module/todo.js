@@ -47,7 +47,7 @@ export const Todo = wrapperTodos => {
         value
     })
 
-    const render = () => getTodos()
+    const render = () => api.getTodos()
         .then(todos => {
             renderTodoList(todos)
             renderTodoCounts(todos)
@@ -81,8 +81,6 @@ export const Todo = wrapperTodos => {
     const addTodo = todoText => api.addTodo({ value: todoText })
         .then(getTodos)
         .then(render)
-
-    const getTodos = api.getTodos
 
     const updateTodo = todo => api.updateTodo(todo)
         .then(getTodos)
