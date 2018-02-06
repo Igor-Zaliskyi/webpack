@@ -49,7 +49,12 @@ const getForm = addTodo => {
     submit.setAttribute('type', 'submit')
     submit.setAttribute('value', 'Add todo')
 
-    form.onsubmit = addTodo
+    form.appendChild(input)
+    form.appendChild(submit)
+    form.onsubmit = event => {
+        event.preventDefault()
+        addTodo(input.value)
+    }
 
     return form
 }
