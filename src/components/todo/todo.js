@@ -1,13 +1,13 @@
-// 1. Save value on change
 import * as api from './todo.service'
+import React, { Component } from 'react'
 import { getCountElement, getForm, getTodoHTML } from './todo.helper'
 
-export class Todo {
-    constructor(container) {
+export class Todo extends Component {
+    constructor (props) {
+        super(props)
         const { wrapper: wrapperGeneralCount, count: generalCount } = getCountElement('General count of todos')
         const { wrapper: wrapperDoneCount, count: doneCount } = getCountElement('Count of done')
         const { wrapper: wrapperUndoneCount, count: undoneCount } = getCountElement('Count of undone')
-        this.todoAppView = document.querySelector(container)
         this.list = document.createElement('ul')
         this.wrapperGeneralCount = wrapperGeneralCount
         this.generalCount = generalCount
@@ -33,11 +33,14 @@ export class Todo {
     }
 
     render() {
-        return api.getTodos()
-            .then(todos => {
-                this.renderTodoList(todos)
-                this.renderTodoCounts(todos)
-            })
+        return (
+            <div>Todoooo</div>
+        )
+        // return api.getTodos()
+        //     .then(todos => {
+        //         this.renderTodoList(todos)
+        //         this.renderTodoCounts(todos)
+        //     })
     }
 
     renderTodoCounts(todos) {

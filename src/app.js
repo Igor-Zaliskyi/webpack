@@ -1,6 +1,13 @@
-import { Todo } from './scripts'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import AppContainer from './container/AppContainer'
 import './sass/index.scss'
 
-const MyTodo = new Todo('#todo-app')
+ReactDOM.render(
+    <AppContainer />,
+    document.getElementById('todo-app')
+)
 
-MyTodo.createTodoTemplate()
+// const MyTodo = new Todo('#todo-app')
+//
+// MyTodo.createTodoTemplate()
