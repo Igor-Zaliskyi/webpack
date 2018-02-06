@@ -75,15 +75,12 @@ export const Todo = wrapperTodos => {
     }
 
     const removeTodoById = todoId => api.removeTodo(todoId)
-        .then(getTodos)
         .then(render)
 
     const addTodo = todoText => api.addTodo({ value: todoText })
-        .then(getTodos)
         .then(render)
 
     const updateTodo = todo => api.updateTodo(todo)
-        .then(getTodos)
         .then(render)
 
     render()

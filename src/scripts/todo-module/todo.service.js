@@ -1,5 +1,4 @@
 const apiEndPoint = 'http://localhost:4000/api/todos'
-const processJSON = res => res.json()
 const headers = new Headers()
 
 headers.append('Accept', 'application/json')
@@ -25,7 +24,7 @@ const updateTodo = todo => fetch(apiEndPoint, {
 
 const getTodos = () =>
     fetch(apiEndPoint)
-        .then(processJSON)
+        .then(res => res.json())
 
 export {
     addTodo,
