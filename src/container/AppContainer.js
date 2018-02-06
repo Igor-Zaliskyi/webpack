@@ -8,17 +8,25 @@ export default class AppContainer extends Component {
         this.state = {
             todos: []
         }
+        this.fetchTodos = this.fetchTodos.bind(this)
+    }
+
+    fetchTodos() {
+        getTodos()
+            .then(todos => this.setState({ todos }))
     }
 
     componentWillMount() {
-        getTodos()
-            .then(todos => this.setState({ todos }))
+        this.fetchTodos()
     }
 
     render() {
         const { todos } = this.state
         return (
-            <Todo todos={todos} />
+            <div>
+                <Todo todos={todos} fetchTodos={this.fetchTodos} />
+                <Todo todos={todos} fetchTodos={this.fetchTodos} />
+            </div>
         )
     }
 }

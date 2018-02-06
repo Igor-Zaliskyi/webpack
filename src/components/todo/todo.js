@@ -1,95 +1,17 @@
 import React, { Component } from 'react'
-import { getCountElement } from './todo.helper'
-import api from './todo.service'
+import * as api from './todo.service'
 
 export class Todo extends Component {
     constructor(props) {
         super(props)
-        const { wrapper: wrapperGeneralCount, count: generalCount } = getCountElement('General count of todos')
-        const { wrapper: wrapperDoneCount, count: doneCount } = getCountElement('Count of done')
-        const { wrapper: wrapperUndoneCount, count: undoneCount } = getCountElement('Count of undone')
-        this.list = document.createElement('ul')
-        this.wrapperGeneralCount = wrapperGeneralCount
-        this.generalCount = generalCount
-        this.wrapperDoneCount = wrapperDoneCount
-        this.doneCount = doneCount
-        this.wrapperUndoneCount = wrapperUndoneCount
-        this.undoneCount = undoneCount
-        this.render = this.render.bind(this)
     }
+
 
     changeStatus(id, isChecked) {
         return this.updateTodo({
             id,
             isChecked
         })
-    }
-
-    render() {
-        const { todos } = this.props
-        return (
-            <div id="todo-app">
-                <p>General count of todos - <span>5</span></p>
-                <p>Count of done - <span>0</span></p>
-                <p>Count of undone - <span>5</span></p>
-                <form>
-                    <input type="text" placeholder="Enter name new todo" />
-                    <input type="submit" value="Add todo" />
-                </form>
-                <ul class="todo-list">
-                    {todos.map(todo => {
-                        return (
-                            <li key={todo.id}>
-                                {todo.value}
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-        )
-    }
-
-    // return api.getTodos()
-    //     .then(todos => {
-    //         this.renderTodoList(todos)
-    //         this.renderTodoCounts(todos)
-    //     })
-
-    renderTodoCounts(todos) {
-        const count = todos.length
-        const done = todos.filter(item => item.isChecked).length
-        const undone = count - done
-
-        this.generalCount.textContent = count
-        this.doneCount.textContent = done
-        this.undoneCount.textContent = undone
-    }
-
-    renderTodoList(todos) {
-        const { list, changeStatus, removeTodo, updateTextLabel } = this
-        list.innerHTML = ''
-        todos
-            .map((item, index) => getTodoHTML(item, index, {
-                changeStatus:    changeStatus.bind(this),
-                removeTodo:      removeTodo.bind(this),
-                updateTextLabel: updateTextLabel.bind(this)
-            }))
-            .forEach(liEelement => list.appendChild(liEelement))
-    }
-
-    removeTodo(todoId) {
-        return api.removeTodo(todoId)
-            .then(this.render)
-    }
-
-    addTodo(todoText) {
-        return api.addTodo({ value: todoText })
-            .then(this.render)
-    }
-
-    updateTodo(todo) {
-        return api.updateTodo(todo)
-            .then(this.render)
     }
 
     updateTextLabel(id, value) {
@@ -99,18 +21,49 @@ export class Todo extends Component {
         })
     }
 
+    removeTodo(todoId) {
+        return api.removeTodo(todoId)
+            .then(this.props.fetchTodos)
+    }
 
-    createTodoTemplate() {
-        const { todoAppView, list } = this
-        const form = getForm(this.addTodo.bind(this))
-        list.className = 'todo-list'
+    addTodo(todoText) {
+        return api.addTodo({ value: todoText })
+            .then(this.props.fetchTodos)
+    }
 
-        todoAppView.appendChild(this.wrapperGeneralCount)
-        todoAppView.appendChild(this.wrapperDoneCount)
-        todoAppView.appendChild(this.wrapperUndoneCount)
-        todoAppView.appendChild(form)
-        todoAppView.appendChild(list)
+    updateTodo(todo) {
+        return api.updateTodo(todo)
+            .then(this.props.fetchTodos)
+    }
 
-        return this.render()
+    render() {
+        const { todos } = this.props
+        const allTodos = todos.length
+        const doneTodos = todos.filter(todo => todo.isChecked).length
+        const undoneTodos = allTodos - doneTodos
+        return (
+            <div id="todo-app">
+                <p>General count of todos - <span>{allTodos}</span></p>
+                <p>Count of done - <span>{doneTodos}</span></p>
+                <p>Count of undone - <span>{undoneTodos}</span></p>
+                <form onSubmit={() => this.addTodo()}>
+                    <input type="text" placeholder="Enter name new todo" />
+                    <input type="submit" value="Add todo" />
+                </form>
+                <ul className="todo-list">
+                    {todos.map(todo => {
+                        return (
+                            <li key={todo.id}>
+                                <input type="checkbox" checked={todo.isChecked}
+                                       onChange={() => this.changeStatus(todo.id, !todo.isChecked)} />
+                                <label contentEditable={true}
+                                       onBlur={() => this.updateTextLabel(todo.id, '')}>{todo.value}</label>
+                                <button onClick={() => this.removeTodo(todo.id)}>X</button>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+        )
     }
 }

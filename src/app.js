@@ -7,7 +7,3 @@ ReactDOM.render(
     <AppContainer />,
     document.getElementById('todo-app')
 )
-
-// const MyTodo = new Todo('#todo-app')
-//
-// MyTodo.createTodoTemplate()
