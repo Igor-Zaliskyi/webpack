@@ -1,7 +1,8 @@
 // 1. Save value on change
+import * as api from './todo.service'
 
 const getTodoHTML = (item, index, callbacks) => {
-    const { changeStatusById, removeTodoById, seveTextLabel} = callbacks
+    const { changeStatusById, removeTodoById, seveTextLabel } = callbacks
     const li = document.createElement('li')
     const input = document.createElement('input')
     const label = document.createElement('label')
@@ -14,7 +15,7 @@ const getTodoHTML = (item, index, callbacks) => {
     }
     input.setAttribute('type', 'checkbox')
     // input.setAttribute('id', id)
-    input.onchange = () => changeStatusById(item.id, li)
+    input.onchange = () => changeStatusById(item.id, !item.isChecked)
     // label.setAttribute('for', id)
     label.innerText = item.value
     label.setAttribute('contenteditable', 'true')
@@ -32,36 +33,27 @@ const getTodoHTML = (item, index, callbacks) => {
 
 export const Todo = wrapperTodos => {
     const todoAppView = document.querySelector(wrapperTodos)
-    const todoLocalStorageKey = 'todos'
     const generalCount = document.getElementById('generalCount')
     const doneCount = document.getElementById('doneCount')
     const undoneCount = document.getElementById('undoneCount')
 
-    const changeStatusById = (todoId, parentElement) => {
-        const todo = getTodos().find(todo => todo.id === todoId)
-        todo.isChecked = !todo.isChecked
-        parentElement.classList.toggle('active')
+    const changeStatusById = (id, isChecked) => updateTodo({
+        id,
+        isChecked
+    })
 
-        updateTodo(todo)
+    const seveTextLabel = (id, value) => updateTodo({
+        id,
+        value
+    })
 
-        // @todo Y. L. remove it after api
-        renderTodoCounts()
-    }
-    
-    const seveTextLabel = (todoId, label) => {
-        const todo = getTodos().find(todo => todo.id === todoId)
-        todo.value = label
-        
-        updateTodo(todo)
-    }
-    
-    const render = () => {
-        renderTodoList()
-        renderTodoCounts()
-    }
+    const render = () => getTodos()
+        .then(todos => {
+            renderTodoList(todos)
+            renderTodoCounts(todos)
+        })
 
-    const renderTodoCounts = () => {
-        const todos = getTodos()
+    const renderTodoCounts = todos => {
         const count = todos.length
         const done = todos.filter(item => item.isChecked).length
         const undone = count - done
@@ -71,10 +63,9 @@ export const Todo = wrapperTodos => {
         undoneCount.textContent = undone
     }
 
-    const renderTodoList = () => {
+    const renderTodoList = todos => {
         todoAppView.innerHTML = ''
-        console.log(getTodos())
-        getTodos()
+        todos
             .map((item, index) => getTodoHTML(item, index, {
                 changeStatusById,
                 removeTodoById,
@@ -83,43 +74,19 @@ export const Todo = wrapperTodos => {
             .forEach(liEelement => todoAppView.appendChild(liEelement))
     }
 
-    const removeTodoById = todoId => {
-        const todos = getTodos()
-        const index = todos.findIndex(todo => todo.id === todoId)
+    const removeTodoById = todoId => api.removeTodo(todoId)
+        .then(getTodos)
+        .then(render)
 
-        todos.splice(index, 1)
-        saveTodos(todos)
-        render()
-    }
+    const addTodo = todoText => api.addTodo({ value: todoText })
+        .then(getTodos)
+        .then(render)
 
-    const addTodo = todoText => {
-        const todos = getTodos()
-        todos.push({
-            id:        todos.length + 1,
-            value:     todoText,
-            isChecked: false
-        })
+    const getTodos = api.getTodos
 
-        saveTodos(todos)
-        render()
-    }
-
-    const getTodos = () => {
-        return JSON.parse(localStorage.getItem(todoLocalStorageKey)) || []
-    }
-
-    const updateTodo = todo => {
-        const { id: todoId } = todo
-        const todos = getTodos()
-        const targetTodo = todos.find(currentTodo => currentTodo.id === todoId)
-        Object.assign(targetTodo, todo)
-        saveTodos(todos)
-    }
-
-    // @todo Y. L. remove it after api
-    const saveTodos = todos => {
-        localStorage.setItem(todoLocalStorageKey, JSON.stringify(todos))
-    }
+    const updateTodo = todo => api.updateTodo(todo)
+        .then(getTodos)
+        .then(render)
 
     render()
 
