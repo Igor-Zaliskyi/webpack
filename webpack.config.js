@@ -7,8 +7,9 @@ const PATHS = {
 }
 
 module.exports = {
+    context: PATHS.src,
     devtool: 'source-map',
-    entry:   PATHS.src + '/app.js',
+    entry:   './app.js',
     output:  {
         path:     PATHS.dist,
         filename: '[name].bundle.js'
@@ -18,7 +19,15 @@ module.exports = {
             {
                 test:    /\.js$/,
                 exclude: /node_modules/,
-                use:     'babel-loader'
+                use:     [{
+                    loader:  'babel-loader',
+                    options: {
+                        presets: [
+                            'es2015',
+                            'react'
+                        ]
+                    }
+                }]
             },
             {
                 test:    /\.scss$/,
@@ -31,10 +40,13 @@ module.exports = {
             }
         ]
     },
+    resolve: {
+        modules: [PATHS.src, 'node_modules']
+    },
     plugins: [
         new HtmlWebpackPlugin({
             title:    'new project',
-            template: PATHS.src + '/index.html',
+            template: './index.html',
             filename: 'index.html',
             inject:   'body',
             hash:     false,
