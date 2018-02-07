@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Todo } from 'components'
-import { getTodos } from 'components/todo/todo.service'
+import { getTodos } from 'api'
 
 export default class AppContainer extends Component {
     constructor(props) {
@@ -23,10 +23,7 @@ export default class AppContainer extends Component {
     render() {
         const { todos } = this.state
         return (
-            <div>
-                <Todo todos={todos} fetchTodos={this.fetchTodos} />
-                <Todo todos={todos} fetchTodos={this.fetchTodos} />
-            </div>
+            <Todo todos={todos} fetchTodos={this.fetchTodos} />
         )
     }
 }
