@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Todo } from 'components'
 import { getTodos } from 'api'
+import logo from 'img/logo.png'
 
 export default class AppContainer extends Component {
     constructor(props) {
@@ -22,7 +23,10 @@ export default class AppContainer extends Component {
 
     render() {
         return (
-            <Todo todos={this.state.todos} onFetchTodos={this.fetchTodos} />
+            <div>
+                <img src={logo} alt="Logo" />
+                <Todo todos={this.state.todos} onFetchTodos={this.fetchTodos} />
+            </div>
         )
     }
 }
