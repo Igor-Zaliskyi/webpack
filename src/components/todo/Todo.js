@@ -21,7 +21,7 @@ export class Todo extends Component {
     }
 
     handleChangeTitle(id, value) {
-        return this.updateTodo({
+        return this.onUpdateTodo({
             id,
             value
         })
