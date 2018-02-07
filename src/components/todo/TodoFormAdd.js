@@ -1,9 +1,9 @@
 import React from 'react'
 
-const TodoFormAdd = ({ onCreateTodo }) => {
+const TodoFormAdd = ({ onAddTodo }) => {
     let input
     return (
-        <form onSubmit={event => onCreateTodo(event, input.value)}>
+        <form onSubmit={event => onAddTodo(event, input.value)}>
             <input type="text" placeholder="Enter name new todo" ref={inputEl => input = inputEl} />
             <input type="submit" value="Add todo" />
         </form>
