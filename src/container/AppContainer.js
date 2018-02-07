@@ -21,9 +21,8 @@ export default class AppContainer extends Component {
     }
 
     render() {
-        const { todos } = this.state
         return (
-            <Todo todos={todos} onFetchTodos={this.fetchTodos} />
+            <Todo todos={this.state} onFetchTodos={this.fetchTodos} />
         )
     }
 }
