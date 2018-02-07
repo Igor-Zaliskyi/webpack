@@ -1,4 +1,4 @@
-const apiEndPoint = 'https://todo-api-domovoj1.c9users.io/api/todos'
+const apiEndPoint = 'http://localhost:4000/api/todos'
 const headers = new Headers()
 
 headers.append('Accept', 'application/json')
