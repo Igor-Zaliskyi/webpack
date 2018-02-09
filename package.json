@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "wds": "webpack-dev-server --inline --hot"
+    "wds": "webpack-dev-server"
   },
   "dependencies": {
     "react": "^16.2.0",

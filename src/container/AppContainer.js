@@ -13,7 +13,7 @@ export default class AppContainer extends Component {
     }
 
     fetchTodos() {
-        getTodos()
+            getTodos()
             .then(todos => this.setState({ todos }))
     }
 
