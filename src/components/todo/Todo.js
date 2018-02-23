@@ -4,7 +4,7 @@ import TodoFormAdd from './TodoFormAdd'
 import TodoItem from './TodoItem'
 import { addTodo, removeTodo, updateTodo } from 'api'
 
-export class Todo extends Component { //?
+export class Todo extends Component {
     constructor(props) {
         super(props)
         this.handleAddTodo = this.handleAddTodo.bind(this)
