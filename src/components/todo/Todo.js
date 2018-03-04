@@ -29,7 +29,7 @@ export class Todo extends Component {
 
     handleRemoveTodo(todoId) {
         return removeTodo(todoId)
-            .then(this.props.onFetchTodos)
+            .then(this.props.onFetchTodos)//?
     }
 
     handleAddTodo(event, value) {

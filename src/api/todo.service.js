@@ -1,5 +1,5 @@
 const apiEndPoint = 'http://localhost:4000/api/todos'
-const headers = new Headers() // ?
+const headers = new Headers() 
 
 headers.append('Accept', 'application/json')
 headers.append('Content-Type', 'application/json')

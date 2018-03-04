@@ -8,7 +8,7 @@ const TodoItem = ({ todo, onUpdateStatus, onUpdateTitle, onRemoveTodo }) => {
                    checked={todo.isChecked}
                    onChange={() => onUpdateStatus(todo.id, !todo.isChecked)} />
             <label contentEditable="true"
-                   suppressContentEditableWarning="true"
+                   suppressContentEditableWarning="true"// ?
                    ref={labelEl => label = labelEl}
                    onBlur={() => onUpdateTitle(todo.id, label.textContent)}>{todo.value}</label>
             <button onClick={() => onRemoveTodo(todo.id)}>X</button>
